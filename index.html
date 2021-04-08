@@ -170,9 +170,19 @@
       }
       removeItem = (todo) => {
         this.props.store.dispatch(removeTodoAction(todo.id))
+        return API.deleteTodo(todo.id)
+          .catch(() => {
+            this.props.store.dispatch(addTodoAction(todo))
+            alert('An error occurred, try again!')
+          })
       }
       toggleItem = (id) => {
         this.props.store.dispatch(toggleTodoAction(id))
+        return API.saveTodoToggle(id)
+          .catch(() => {
+            this.props.store.dispatch(toggleTodoAction(id))
+            alert('An error occurred, try again!')
+          })
       }
       render() {
         return (
@@ -206,8 +216,13 @@
             name: name
           }))
         }
-        removeItem = (todo) => {
-          this.props.store.dispatch(removeGoalAction(todo.id))
+        removeItem = (goal) => {
+          this.props.store.dispatch(removeGoalAction(goal.id))
+          return API.deleteTodo(goal.id)
+            .catch(() => {
+              this.props.store.dispatch(addGoalAction(goal))
+              alert('An error occurred, try again!')
+            })
         }
         render() {
           return (
@@ -245,7 +260,7 @@
       render() {
         const { store } = this.props
         const { todos, goals, loading } = store.getState()
-        
+
         if(loading === true) {
           return <h3>Loading</h3>
         }
